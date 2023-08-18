@@ -1,0 +1,38 @@
+---
+# tasks file for elasticsearch
+- name: Update all packages to their latest version
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+#INSTALLING NGINX
+- name: install NGINX
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+#INSTALLING apache2-utils
+- name: install apache2-utils
+  apt:
+    name: apache2-utils
+    state: present
+    update_cache: yes
+# Add a user to a password file and ensure permissions are set
+#- name: Add a user to a password file and ensure permissions are set 
+#  htpasswd:
+#    path: /etc/nginx/passwdfile
+#    name: kibana
+#    password: 'kibana'
+#    owner: root
+#    group: root
+#    mode: 0640
+# Modifying the nginx configuration file
+- name: Replace default nginx.con
+  template:
+   src: default
+   dest: /etc/nginx/sites-available/default
+- name: Starting Nginx
+  service:
+   name: nginx
+   state: restarted
+   enabled: yes
+

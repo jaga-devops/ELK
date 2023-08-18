@@ -1,0 +1,44 @@
+---
+# tasks file for elasticsearch
+- name: Update all packages to their latest version
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+- name: Installing the java version8
+  apt:
+    name: '{{ JDK_version  }}'
+- name: get apt repo key
+  apt_key:
+    url: '{{ public_signing_key  }}'
+    state: present
+- name: INSTALLING REQUIRED PACKAGES
+  apt:
+    pkg: '{{ packages }}'
+- name: Add elasticsearch repository
+  apt_repository:
+    repo: '{{ elasticsearch_repo }}'
+- name: install logstash
+  apt:
+    name: logstash
+    state: present
+    update_cache: yes
+# Replace default elasticsearch.yml
+
+- name: Replace default logstash.yml
+  template:
+   src: logstash.yml
+   dest: /etc/logstash/logstash.yml
+- name: Starting logstash
+  service:
+   name: logstash
+   state: started
+   enabled: yes
+- name: confure logstash config
+  template:
+   src: nginx.conf
+   dest: /etc/logstash/conf.d/nginx.conf
+- name: Starting logstash
+  service:
+   name: logstash
+   state: restarted
+   enabled: yes

@@ -1,0 +1,10 @@
+---
+# setup.yml as a ansible playbook
+- hosts: localhost
+  become: yes
+  roles:
+          - elasticsearch
+          - kibana
+          - nginx
+          - filebeat
+          - logstash
